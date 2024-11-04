@@ -44,10 +44,12 @@ var rootRouter = require('./router/rootRouter');
 // })
 
 app.use('/', rootRouter);
-app.use(('/author', authorRouter));
+// app.use('/author', authorRouter);
 
 //정적파일
 app.use(express.static('public'));
+
+console.log("현위치"+__dirname+ '/publlic');
 
 // app.get('/create', (req, res) => {
 //     topic.create(req, res)

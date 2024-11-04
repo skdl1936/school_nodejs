@@ -204,6 +204,8 @@ module.exports = {
     },
 
     update_process: (req, res) => {
+        
+        
         var post = req.body;
         var sanitizedTitle = sanitizeHtml(post.title);
         var sanitizedDescription = sanitizeHtml(post.description);
@@ -282,5 +284,18 @@ module.exports = {
         req.session.destroy(((err)=>{
             res.redirect('/');
         }));
+    },
+
+    upload: (req,res)=>{
+        var context = {
+            lg:''
+        };
+
+        req.app.render('uploadtest',context,(err,html)=>{
+            res.end(html);
+        })
     }
+
+
+
 }//module
