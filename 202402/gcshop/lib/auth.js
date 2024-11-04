@@ -10,7 +10,7 @@ function authIsOwner(req,res){
         login = true;
         cls = req.session.cls;
     }
-    return {name, login, cls}
+    return {name, login, cls};
 }
 
 
@@ -24,6 +24,7 @@ module.exports = {
             body : 'login.ejs',
             cls : cls
         };
+
         req.app.render('mainFrame', context, (err,html)=>{
             res.end(html);
         })
@@ -89,9 +90,15 @@ module.exports = {
 
         db.query(`
             insert into person values(?,?,?,?,?,?,?,?);`,
-            [id,pwd,name,address,tel, birth,"CST","S"]
+            [id,pwd,name,address,tel, birth,"CST","S"],(err,result)=>{
+                if(err){
+                    throw err;
+                }
+
+                res.redirect('/');
+                res.end();
+            }
         );
-        res.redirect('/');
     },
 
 

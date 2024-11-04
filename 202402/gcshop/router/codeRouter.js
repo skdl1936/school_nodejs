@@ -6,7 +6,7 @@ var code = require('../lib/code');
 
 router.get('/view', (req,res)=>{
     code.view(req,res);
-};
+});
 
 router.get('/create', (req,res)=>{
     code.create(req,res);

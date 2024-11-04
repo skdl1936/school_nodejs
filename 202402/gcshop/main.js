@@ -6,8 +6,8 @@ var db = require('./lib/db');
 
 var options = {
     host : 'localhost',
-    user : 'nodejs',
-    password: 'nodejs',
+    user : 'root',
+    password: 'root',
     database: 'webdb2024'
 };
 
@@ -27,10 +27,11 @@ app.set('view engine', 'ejs');
 
 var authorRouter = require('./router/authRouter');
 var rootRouter = require('./router/rootRouter');
-
+var codeRouter = require('./router/codeRouter');
 
 app.use('/', rootRouter);
 app.use('/auth', authorRouter);
+app.use('/code', codeRouter);
 
 //정적파일
 app.use(express.static('public'));
