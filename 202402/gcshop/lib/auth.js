@@ -18,15 +18,18 @@ module.exports = {
     login : (req,res) =>{
         var {name, login, cls} = authIsOwner(req,res);
 
-        var context = {
-            who: name,
-            login : login,
-            body : 'login.ejs',
-            cls : cls
-        };
+        db.query('select * from boardtype',(err, boardtype)=>{
+            var context = {
+                who: name,
+                login : login,
+                body : 'login.ejs',
+                cls : cls,
+                boardtypes: boardtype
+            };
 
-        req.app.render('mainFrame', context, (err,html)=>{
-            res.end(html);
+            req.app.render('mainFrame', context, (err,html)=>{
+                res.end(html);
+            })
         })
     },
 
@@ -68,16 +71,20 @@ module.exports = {
             return ;
         }
 
-        var context={
-            who: name,
-            login: login,
-            body: 'personCU.ejs',
-            cls: cls
-        }
+        db.query(`select * from boardtype;`,(err, boardtype)=>{
+            var context={
+                who: name,
+                login: login,
+                body: 'personCU.ejs',
+                cls: cls,
+                boardtypes: boardtype
+            }
 
-        req.app.render('mainFrame', context, (err,html)=>{
-            res.end(html);
-        });
+            req.app.render('mainFrame', context, (err,html)=>{
+                res.end(html);
+            });
+
+        })
     },
     signUp_process: (req,res)=>{
         var post = req.body;

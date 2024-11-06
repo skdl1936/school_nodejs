@@ -15,15 +15,21 @@ function authIsOwner(req,res){
 module.exports = {
     home: (req, res) => {
         var {login, name, cls} = authIsOwner(req, res)
+        var sql1 = 'select * from boardtype;';
         var sql2 = ` select * from product;`
-        db.query(sql2, (error, results) => {
+        db.query(sql1, (error, results) => {
+            if(error){
+                throw error;
+            }
             var context = {
                 /*********** mainFrame.ejs에 필요한 변수 ***********/
                 who: name,
                 login: login,
                 body: 'test.ejs',
-                cls: cls
+                cls: cls,
+                boardtypes: results
             };
+            console.log(results);
             res.render('mainFrame', context, (err, html) => {
                 res.end(html)
             }); //render end
