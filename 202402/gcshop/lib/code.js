@@ -18,16 +18,21 @@ module.exports = {
     view: (req,res)=>{ // code.ejs
         var {name, login, cls} = authIsOwner(req,res);
 
-        db.query(`select * from code;`, (err,codes)=>{
+        var sql1 = 'select * from boardtype;';
+        var sql2 = ' select * from code;';
+
+        db.query(sql1 + sql2, (err,results)=>{
             if(err){
                 throw err;
             }
+
             var context = {
                 who: name,
                 login : login,
                 body : 'code.ejs',
                 cls : cls,
-                codes: codes
+                boardtypes: results[0],
+                codes: results[1]
             };
 
             req.app.render('mainFrame', context, (err,html)=>{
@@ -39,16 +44,19 @@ module.exports = {
     create: (req,res)=>{ // codeCU.ejs
         var {name, login, cls} = authIsOwner(req,res);
 
-        var context = {
-            who: name,
-            login : login,
-            body : 'codeCU.ejs',
-            cls : cls,
-            check: true // 입력인지 수정인지 확인
-        };
+        db.query(`select * from boardtype;`, (err,boardtypes)=>{
+            var context = {
+                who: name,
+                login : login,
+                body : 'codeCU.ejs',
+                cls : cls,
+                check: true, // 입력인지 수정인지 확인
+                boardtypes: boardtypes
+            };
 
-        req.app.render('mainFrame', context, (err,html)=>{
-            res.end(html);
+            req.app.render('mainFrame', context, (err,html)=>{
+                res.end(html);
+            })
         })
 
     },
@@ -75,15 +83,17 @@ module.exports = {
 
     update : (req,res)=>{ // codeCU.ejs
         var {name, login, cls} = authIsOwner(req,res);
-        db.query(`select * from code where main_id = ?;`,
-            [req.params.main ], (err,code)=>{
+        var sql1 = 'select * from boardtype; ';
+        var sql2 =  `select * from code where main_id = ` + req.params.main + ';'
+        db.query(sql1 + sql2, (err,results)=>{
                 var context = {
                     who: name,
                     login : login,
                     body : 'codeCU.ejs',
                     cls : cls,
                     check: false, // 생성(true)인지 수정(false)인지 확인
-                    code: code
+                    boardtypes: results[0],
+                    code: results[1],
                 };
 
                 req.app.render('mainFrame', context, (err,html)=>{
@@ -108,22 +118,8 @@ module.exports = {
             if(err){
                 throw err;
             }
-            db.query(`select * from code;`, (err2,codes)=>{
-                if(err2){
-                    throw err2;
-                }
-                var context = {
-                    who: name,
-                    login : login,
-                    body : 'code.ejs',
-                    cls : cls,
-                    codes: codes
-                };
-
-                req.app.render('mainFrame', context, (err,html)=>{
-                    res.end(html);
-                })
-            }); // 두번쨰 쿼리
+            res.redirect('/code/view');
+            res.end();
         }); // 첫번째 쿼리
     },
 
@@ -135,22 +131,8 @@ module.exports = {
             if(err){
                 throw err;
             }
-            db.query(`select * from code;`, (err2,codes)=>{
-                if(err2){
-                    throw err2;
-                }
-                var context = {
-                    who: name,
-                    login : login,
-                    body : 'code.ejs',
-                    cls : cls,
-                    codes: codes
-                };
-
-                req.app.render('mainFrame', context, (err,html)=>{
-                    res.end(html);
-                })
-            }); // 두번째 쿼리
+            res.redirect('/code/view');
+            res.end();
         }); // 첫번쨰 쿼리
     }
 }

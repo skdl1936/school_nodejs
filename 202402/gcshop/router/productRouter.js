@@ -24,7 +24,7 @@ router.post('/update_process', (req,res)=>{
 })
 
 router.get('/delete/:merId', (req,res)=>{{
-    product.delete_process();
+    product.delete_process(req,res);
 }})
 
 module.exports = router;
