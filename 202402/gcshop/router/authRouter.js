@@ -1,7 +1,7 @@
 const express = require('express');
-var router = express.Router();
+const router = express.Router();
 
-var auth = require('../lib/auth');
+const auth = require('../lib/auth');
 
 router.get('/login', (req,res) =>{
     auth.login(req,res)

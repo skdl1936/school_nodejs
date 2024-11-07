@@ -1,18 +1,6 @@
-var db = require('./db');
-var sanitizeHtml = require('sanitize-html');
-
-function authIsOwner(req,res){
-    var name = 'Guest';
-    var login = false;
-    var cls = 'NON'; // 로그인 확인
-    if(req.session.is_logined){
-        name = req.session.name;
-        login = true;
-        cls = req.session.cls;
-    }
-    return {name, login, cls};
-}
-
+const db = require('./db');
+const sanitizeHtml = require('sanitize-html');
+const {authIsOwner} = require('./util');
 
 module.exports = {
     view: (req,res)=>{ // code.ejs
@@ -104,17 +92,18 @@ module.exports = {
     },
 
     update_process:(req,res)=>{
-        var {name, login, cls} = authIsOwner(req,res);
+        const post = req.body;
+        const sanMId = sanitizeHtml(post.main_id);
+        const sanSId = sanitizeHtml(post.sub_id);
+        const sanMname = sanitizeHtml(post.main_name);
+        const sanSname = sanitizeHtml(post.sub_name);
+        const sanStart = sanitizeHtml(post.startValue);
+        const sanEnd = sanitizeHtml(post.end);
 
-        var post = req.body;
-        var sanMId = sanitizeHtml(post.main_id);
-        var sanSId = sanitizeHtml(post.sub_id);
-        var sanMname = sanitizeHtml(post.main_name);
-        var sanSname = sanitizeHtml(post.sub_name);
-        var sanEnd = sanitizeHtml(post.end);
 
-        db.query(`update code set main_id= ?, sub_id = ?, main_name = ?, sub_name = ? , end=? where main_id = ?;`,
-            [sanMId, sanSId, sanMname, sanSname, sanEnd,sanMId], (err, result)=>{
+        db.query(`update code set main_id= ?, sub_id = ?, main_name = ?, sub_name = ? , end= ? 
+                where main_id = ? and sub_id = ? and start = ? ;`,
+            [sanMId, sanSId, sanMname, sanSname, sanEnd,sanMId,sanSId,sanStart], (err, result)=>{
             if(err){
                 throw err;
             }
@@ -124,10 +113,10 @@ module.exports = {
     },
 
     delete_process: (req,res)=>{
-        var {name, login, cls} = authIsOwner(req,res);
-        var main_id = req.params.main;
-
-        db.query(`delete from code where main_id = ?;`,[main_id], (err,result)=>{
+        const main_id = req.params.main;
+        const sub_id = req.params.sub;
+        const start = req.params.start;
+        db.query(`delete from code where main_id = ? and sub_id = ? and start = ?;`,[main_id,sub_id,start], (err,result)=>{
             if(err){
                 throw err;
             }
