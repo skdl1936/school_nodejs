@@ -10,11 +10,11 @@
 
     <% for( var i =0; i<products.length; i++){ %>
         <tr><td><a href="/image/<%= products[i].image %>" style="text-decoration: none;"><img src="/image/<%= products[i].image %>" style="width:100px;height:100px; "></a></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a href="/product/update">수정</a></td>
-            <td><a href="/product/delete" onclick="if(confirm('정말로 삭제하시겠습니까?')==false) return false">삭제</a></td>
+            <td><%= products[i].name%></td>
+            <td><%= products[i].price%>원</td>
+            <td><%= products[i].brand%></td>
+            <td><a href="/product/update/<%= products[i].mer_id%>">수정</a></td>
+            <td><a href="/product/delete/<%= products[i].mer_id%>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false) return false">삭제</a></td>
         </tr>
     <%}%>
 </table>

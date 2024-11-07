@@ -1,4 +1,3 @@
-
 module.exports = {
     authIsOwner : (req,res)=>{
         var name = 'Guest';

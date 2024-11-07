@@ -1,7 +1,7 @@
 const express = require('express');
-var router = express.Router();
+const router = express.Router();
 
-var code = require('../lib/code');
+const code = require('../lib/code');
 
 
 router.get('/view', (req,res)=>{

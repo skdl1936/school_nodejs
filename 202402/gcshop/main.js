@@ -6,8 +6,8 @@ var db = require('./lib/db');
 
 var options = {
     host : 'localhost',
-    user : 'nodejs',
-    password: 'nodejs',
+    user : 'root',
+    password: 'root',
     database: 'webdb2024'
 };
 
@@ -25,17 +25,25 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 
-var authorRouter = require('./router/authRouter');
-var rootRouter = require('./router/rootRouter');
-var codeRouter = require('./router/codeRouter');
-var productRouter = require('./router/productRouter');
+const authorRouter = require('./router/authRouter');
+const rootRouter = require('./router/rootRouter');
+const codeRouter = require('./router/codeRouter');
+const productRouter = require('./router/productRouter');
+const personRouter = require('./router/personRouter');
+const boardRouter = require('./router/boardRouter');
+
 
 app.use('/', rootRouter);
 app.use('/auth', authorRouter);
 app.use('/code', codeRouter);
 app.use('/product', productRouter);
+app.use('/person', personRouter);
+app.use('/board', boardRouter);
 
 //정적파일
 app.use(express.static('public'));
+
+//URL 인코딩
+// app.use(express.urlencoded({ extended: true }));
 
 app.listen(3000, () => console.log('Example app listening on port 3000'));

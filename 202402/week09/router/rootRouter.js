@@ -6,8 +6,10 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) { cb(null, 'public/images'); },
         filename: function (req, file, cb) {
-            var newFileName = Buffer.from(file.originalname, "latin1").toString("utf-8")
-            cb(null, newFileName); }
+            var newFileName = Buffer.from(file.originalname, "latin1").toString("utf-8");
+            console.log(newFileName);
+            cb(null, newFileName);
+        }
     }),
 });
 
