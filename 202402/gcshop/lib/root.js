@@ -7,7 +7,7 @@ module.exports = {
         var {login, name, cls} = authIsOwner(req, res)
         var sql1 = 'select * from boardtype;';
         var sql2 = ` select * from product;`
-        db.query(sql1, (error, results) => {
+        db.query(sql1 + sql2, (error, results) => {
             if(error){
                 throw error;
             }
@@ -15,9 +15,11 @@ module.exports = {
                 /*********** mainFrame.ejs에 필요한 변수 ***********/
                 who: name,
                 login: login,
-                body: 'test.ejs',
+                body: 'product.ejs',
                 cls: cls,
-                boardtypes: results
+                boardtypes: results[0],
+                products:results[1],
+                routing: "root"
             };
             res.render('mainFrame', context, (err, html) => {
                 res.end(html)
