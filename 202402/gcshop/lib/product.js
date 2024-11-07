@@ -20,7 +20,8 @@ module.exports = {
                 body: 'product.ejs',
                 cls:cls,
                 boardtypes: results[0],
-                products: results[1]
+                products: results[1],
+                routing: "product"
             };
 
             res.render("mainFrame", context, (err,html)=>{
