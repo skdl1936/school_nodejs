@@ -7,8 +7,9 @@ module.exports = {
     typeview: (req, res) => {
         const {name, login, cls} = authIsOwner(req,res);
         const sql1 = `select * from boardtype; `;
+        const sql2 = ` select * from code; `
 
-        db.query(sql1, (err,results)=>{
+        db.query(sql1 + sql2, (err,results)=>{
             if(err){
                 throw err;
             }
@@ -17,8 +18,9 @@ module.exports = {
                 login: login,
                 cls: cls,
                 body: 'boardtype.ejs',
-                boardtypes: results,
-                boardType: results
+                boardtypes: results[0],
+                boardType: results[0],
+                codes: results[1]
             }
             req.app.render('mainFrame', context, (err, html) => {
                 res.end(html);
@@ -29,7 +31,7 @@ module.exports = {
     typecreate: (req, res) => {
         const {name, login, cls} = authIsOwner(req,res);
         const sql1 = `select * from boardtype; `;
-
+        const sql2 = ` select * from code;`
         db.query(sql1, (err,results)=>{
             if(err){
                 throw err;
@@ -40,8 +42,9 @@ module.exports = {
                 login : login,
                 cls : cls,
                 body: 'boardtypeCU.ejs',
-                boardtypes: results,
-                boardtype: null
+                boardtypes: results[0],
+                boardtype: null,
+                codes: results[1]
             }
             req.app.render('mainFrame', context, (err, html) => {
                 res.end(html);
@@ -73,9 +76,10 @@ module.exports = {
     typeupdate: (req, res) => {
         const {name, login, cls} = authIsOwner(req,res);
         const sql1 = `select * from boardtype; `;
-        const sql2 = `select * from boardtype where type_id = ${req.params.typeId};`;
+        const sql2 = ` select * from code; `
+        const sql3 = `select * from boardtype where type_id = ${req.params.typeId};`;
 
-        db.query(sql1 + sql2, (err,results)=>{
+        db.query(sql1 + sql2 + sql3, (err,results)=>{
             if(err){
                 throw err;
             }
@@ -86,7 +90,8 @@ module.exports = {
                 cls : cls,
                 body: 'boardtypeCU.ejs',
                 boardtypes: results[0],
-                boardtype: results[1]
+                codes: results[1],
+                boardtype: results[2],
             }
             req.app.render('mainFrame', context, (err, html) => {
                 res.end(html);
@@ -132,16 +137,17 @@ module.exports = {
         const sanTypeId = sanitizeHtml(req.params.typeId);
         const pNum = req.params.pNum;
         const sql1 = `select * from boardtype;` // results[0]
-        const sql2 = ` select * from boardtype where type_id = ${sanTypeId};` // results[1]
-        const sql3 = ` select count(*) as total from board where type_id = ${sanTypeId};` // results[2]
+        const sql2 = ` select * from code;`
+        const sql3 = ` select * from boardtype where type_id = ${sanTypeId};` // results[1]
+        const sql4 = ` select count(*) as total from board where type_id = ${sanTypeId};` // results[2]
 
-        db.query(sql1 + sql2 + sql3 , (err,results)=>{
+        db.query(sql1 + sql2 + sql3+ sql4 , (err,results)=>{
             if(err){
                 throw err;
             }
-            const numPerPage = results[1][0].numPerPage;
+            const numPerPage = results[2][0].numPerPage;
             const offs = (pNum-1)*numPerPage;
-            const totalPages = Math.ceil(results[2][0].total / numPerPage);
+            const totalPages = Math.ceil(results[3][0].total / numPerPage);
 
             db.query(`select b.board_id as board_id, b.title as title, b.date as date, p.name as name
                 from board b inner join person p on b.loginid = p.loginid
@@ -159,7 +165,8 @@ module.exports = {
                     boards: boards,
                     pNum: pNum,
                     totalPages: totalPages,
-                    boardTypeInfo: results[1]
+                    codes: results[1],
+                    boardTypeInfo: results[2],
                 }
 
                 req.app.render('mainFrame', context, (err, html) => {
@@ -176,9 +183,10 @@ module.exports = {
         const {name, login, cls} = authIsOwner(req,res);
         const sanTypeId = sanitizeHtml(req.params.typeId);
         var sql1 = `select * from boardtype; `;
-        var sql2 = `select * from boardtype where type_id=${ sanTypeId }; `;
+        const sql2 = ` select * from code;`
+        var sql3 = ` select * from boardtype where type_id=${ sanTypeId }; `;
 
-        db.query(sql1 + sql2 , (err,results)=>{
+        db.query(sql1 + sql2 +sql3, (err,results)=>{
             if (err){
                 throw err;
             }
@@ -191,7 +199,8 @@ module.exports = {
                 boardInfo: null,
                 userName :req.session.name,
                 userLoginId: req.session.loginid,
-                boardtypeInfo: results[1],
+                codes:results[1],
+                boardtypeInfo: results[2],
                 mode: 'create'
             }
 
@@ -227,10 +236,11 @@ module.exports = {
         const sanBoardId = sanitizeHtml(req.params.boardId);
         const pNum = sanitizeHtml(req.params.pNum);
         const sql1 = `select * from boardtype; `;
-        const sql2 = 'select b.board_id as board_id, b.title as title,b.content as content, p.loginid as loginid, '+
+        const sql2 = ` select * from code; `
+        const sql3 = 'select b.board_id as board_id, b.title as title,b.content as content, p.loginid as loginid, '+
                        'b.password as pwd , b.date as date, b.type_id as type_id, p.name as name'+
                 ' from board b inner join person p on b.loginid = p.loginid where board_id = '+ sanBoardId + ';';
-        db.query(sql1 + sql2, (err,results)=>{
+        db.query(sql1 + sql2 + sql3, (err,results)=>{
             if(err){
                 throw err;
             }
@@ -243,7 +253,8 @@ module.exports = {
                 body: 'boardCRU.ejs',
                 mode: 'detail',
                 boardtypes: results[0],
-                boardInfo: results[1],
+                codes: results[1],
+                boardInfo: results[2],
                 pNum: pNum,
                 userLoginId: req.session.loginid
             }
@@ -262,12 +273,13 @@ module.exports = {
         const sanBoardId = sanitizeHtml(req.params.boardId);
         const sanPnum = sanitizeHtml(req.params.pNum);
         const sql1 = `select * from boardtype; `;
-        const sql2 = 'select b.board_id as board_id, b.title as title,b.content as content,'+
+        const sql2 = ` select * from code; `
+        const sql3 = 'select b.board_id as board_id, b.title as title,b.content as content,'+
             'b.password as pwd , b.date as date, b.type_id as type_id, p.name as name'+
             ' from board b inner join person p on b.loginid = p.loginid where board_id = '+ sanBoardId + ';';
-        const sql3 = ` select * from boardtype where type_id = ${sanTypeId}`;
+        const sql4 = ` select * from boardtype where type_id = ${sanTypeId};`;
 
-        db.query(sql1 + sql2 + sql3, (err,results)=>{
+        db.query(sql1 + sql2 + sql3 + sql4, (err,results)=>{
             if (err){
                 throw err;
             }
@@ -278,8 +290,9 @@ module.exports = {
                 body: 'boardCRU.ejs',
                 mode: 'update',
                 boardtypes: results[0],
-                boardInfo: results[1],
-                boardTypeInfo: results[2],
+                codes: results[1],
+                boardInfo: results[2],
+                boardTypeInfo: results[3],
                 userLoginId: req.session.loginid,
                 pNum: sanPnum,
             }

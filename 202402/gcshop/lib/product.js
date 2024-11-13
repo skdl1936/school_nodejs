@@ -7,7 +7,8 @@ module.exports = {
     view: (req, res)=>{ // product.ejs
         var {name, login, cls} = authIsOwner(req,res);
         var sql1 = `select * from boardtype; `;
-        var sql2 = 'select * from product;';
+        const sql2 = ` select * from code; `;
+        var sql3 = 'select * from product;';
 
         db.query(sql1 + sql2,(err,results)=>{
             if(err){
@@ -20,7 +21,8 @@ module.exports = {
                 body: 'product.ejs',
                 cls:cls,
                 boardtypes: results[0],
-                products: results[1],
+                codes: results[1],
+                products: results[2],
                 routing: "product"
             };
 
@@ -45,6 +47,7 @@ module.exports = {
                 cls:cls,
                 boardtypes: results[0],
                 categorys: results[1],
+                codes: results[1],
                 mer : null
             }
 
@@ -94,6 +97,7 @@ module.exports = {
                 cls : cls,
                 boardtypes: results[0],
                 categorys: results[1],
+                codes: results[1],
                 mer: results[2],
             }
             req.app.render('mainFrame', context, (err,html)=>{
