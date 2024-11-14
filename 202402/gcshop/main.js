@@ -6,8 +6,8 @@ var db = require('./lib/db');
 
 var options = {
     host : 'localhost',
-    user : 'root',
-    password: 'root',
+    user : 'nodejs',
+    password: 'nodejs',
     database: 'webdb2024'
 };
 

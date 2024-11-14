@@ -6,9 +6,10 @@ module.exports = {
     view: (req,res)=>{ //person.ejs
         const {name, login, cls} = authIsOwner(req);
         const sql1 = `select * from boardtype; `;
-        const sql2 = 'select * from person;';
+        const sql2 = ` select * from code; `;
+        const sql3 = 'select * from person;';
 
-        db.query(sql1 + sql2,(err,results)=>{
+        db.query(sql1 + sql2 + sql3,(err,results)=>{
             if(err){
                 throw err;
             }
@@ -18,7 +19,8 @@ module.exports = {
                 body:'person.ejs',
                 cls:cls,
                 boardtypes: results[0],
-                persons: results[1],
+                codes: results[1],
+                persons: results[2],
             }
 
             req.app.render('mainFrame', context, (err,html)=>{
@@ -30,8 +32,8 @@ module.exports = {
     create: (req,res)=>{ // personCU.ejs
         const {name, login, cls} = authIsOwner(req);
         const sql1 = `select * from boardtype; `;
-
-        db.query(sql1 ,(err,results)=>{
+        const sql2 = ` select * from code; `;
+        db.query(sql1+ sql2 ,(err,results)=>{
             if(err){
                 throw err;
             }
@@ -41,7 +43,8 @@ module.exports = {
                 login:login,
                 body: "personCU.ejs",
                 cls:cls,
-                boardtypes: results,
+                boardtypes: results[0],
+                codes: results[1],
                 person: null
             }
 
@@ -72,9 +75,10 @@ module.exports = {
         const {name, login, cls} = authIsOwner(req);
 
         const sql1 = `select * from boardtype; `;
-        const sql2 = `select * from person where loginid = '${req.params.loginId}';`; // 2차원배열임
+        const sql2 = ` select * from code; `;
+        const sql3 = `select * from person where loginid = '${req.params.loginId}';`; // 2차원배열임
 
-        db.query(sql1 + sql2 ,(err,results)=>{
+        db.query(sql1 + sql2 + sql3 ,(err,results)=>{
             if(err){
                 throw err;
             }
@@ -84,7 +88,8 @@ module.exports = {
                 body: "personCU.ejs",
                 cls:cls,
                 boardtypes: results[0],
-                person: results[1]
+                codes: results[1],
+                person: results[2],
             }
 
             req.app.render('mainFrame', context, (err,html)=>{

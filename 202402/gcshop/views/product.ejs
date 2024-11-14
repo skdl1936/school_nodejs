@@ -9,7 +9,7 @@
     </thead> 
 
     <% for( var i =0; i<products.length; i++){ %>
-        <tr><td><a href="/image/<%= products[i].image %>" style="text-decoration: none;"><img src="/image/<%= products[i].image %>" style="width:100px;height:100px; "></a></td>
+        <tr><td><a href="/detail/<%= products[i].mer_id %>" style="text-decoration: none;"><img src="/image/<%= products[i].image %>" style="width:100px;height:100px; "></a></td>
             <td><%= products[i].name%></td>
             <td><%= products[i].price%>원</td>
             <td><%= products[i].brand%></td>
