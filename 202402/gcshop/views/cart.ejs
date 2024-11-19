@@ -1,0 +1,63 @@
+<% if(carts.length === 0) { %>
+    <p>장바구니 비어있음</p>
+<% } else { %>
+    <form id="cartForm" method="post" >
+        <table class="table table-bordered " style="text-align: center;">
+            <thead class="table-primary ">
+            <th>구매선택</th><th>상품</th><th>상품명</th><th>단가</th><th>담은날</th><th>수량</th>
+            </thead>
+
+            <% for(var i = 0; i < carts.length; i++) { %>
+                <tr>
+                    <input type="hidden" value = "<%= carts[i].mer_id%>" name = "mer_id">
+                    <input type="hidden" value = "<%= carts[i].price %>" name = "price">
+
+                    <td><input type="checkbox" name="checkProduct" value="<%= carts[i].cart_id %>"></td>
+                    <td><a href="/detail/<%= carts[i].mer_id %>" style="text-decoration: none;"><img src="/image/<%= carts[i].image %>" style="width:100px;height:100px;"></a></td>
+                    <td><%= carts[i].name %></td>
+                    <td><%= carts[i].price %>원</td>
+                    <td><%= carts[i].date %></td>
+                    <td><input type="number" value="1" name="qty"> </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <button class="btn btn-outline-primary btn-sm" onclick="return submitForm('/purchase/cart/buy')" type="submit">결제</button>
+
+        <button class="btn btn-outline-primary btn-sm" onclick="return submitForm('/purchase/cart/delete')" type="submit">삭제</button>
+
+        <button class="btn btn-outline-primary btn-sm" type="button" onclick="location.href='/'">상품 목록 돌아가기</button>
+    </form>
+<% } %>
+
+<script>
+    function submitForm(url) {
+        const form = document.getElementById('cartForm');
+        const checkboxes = document.querySelectorAll('input[name="checkProduct"]:checked');
+
+        // 체크된 항목이 없는 경우 경고 메시지를 표시하고 함수 종료
+        if (checkboxes.length === 0) {
+            if (url === '/purchase/cart/buy') {
+                alert("구매할 상품을 선택해 주세요.");
+            } else if (url === '/purchase/cart/delete') {
+                alert("삭제할 상품을 선택해 주세요.");
+            }
+            return false;
+        }
+
+        if(url === '/purchase/cart/delete'){
+            if(!confirm("정말로 삭제하시겠습니까? ")){
+                return false ;
+            }else{
+                form.action = url;
+                return true;
+            }
+        }
+
+        if(url === '/purchase/cart/buy'){
+            form.action = url;
+            return true;
+        }
+
+    }
+</script>

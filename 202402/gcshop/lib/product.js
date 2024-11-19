@@ -5,12 +5,12 @@ const {authIsOwner} = require('./util');
 
 module.exports = {
     view: (req, res)=>{ // product.ejs
-        var {name, login, cls} = authIsOwner(req,res);
-        var sql1 = `select * from boardtype; `;
+        const {name, login, cls} = authIsOwner(req,res);
+        const sql1 = `select * from boardtype; `;
         const sql2 = ` select * from code; `;
-        var sql3 = 'select * from product;';
+        const sql3 = 'select * from product;';
 
-        db.query(sql1 + sql2,(err,results)=>{
+        db.query(sql1 + sql2 + sql3,(err,results)=>{
             if(err){
                 throw err;
             }

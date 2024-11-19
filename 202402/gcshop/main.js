@@ -6,12 +6,12 @@ var db = require('./lib/db');
 
 var options = {
     host : 'localhost',
-    user : 'nodejs',
-    password: 'nodejs',
+    user : 'root',
+    password: 'root',
     database: 'webdb2024'
 };
 
-var sessionStore = new MySqlStore(options);
+const sessionStore = new MySqlStore(options);
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({
@@ -31,7 +31,7 @@ const codeRouter = require('./router/codeRouter');
 const productRouter = require('./router/productRouter');
 const personRouter = require('./router/personRouter');
 const boardRouter = require('./router/boardRouter');
-
+const purchaseRouter = require('./router/purchaseRouter');
 
 app.use('/', rootRouter);
 app.use('/auth', authorRouter);
@@ -39,6 +39,7 @@ app.use('/code', codeRouter);
 app.use('/product', productRouter);
 app.use('/person', personRouter);
 app.use('/board', boardRouter);
+app.use('/purchase', purchaseRouter);
 
 //정적파일
 app.use(express.static('public'));
