@@ -29,6 +29,7 @@ module.exports = {
         var post = req.body;
         var sntzedLoginid = sanitizeHtml(post.loginid);
         var sntzedPassword = sanitizeHtml(post.password);
+
         db.query('select count(*) as num from person where loginid = ? and password = ?',
             [sntzedLoginid,sntzedPassword],(error, results)=>{
                 if (results[0].num === 1){

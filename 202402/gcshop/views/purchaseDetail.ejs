@@ -1,16 +1,32 @@
 <table class="table table-bordered ">
     <form  method ="post">
-    <tr ><td rowspan = "5"><img src="" style="width:300px;height:300px; "></td>
+    <tr ><td rowspan = "5"><img src="/image/<%= product.image %>" style="width:300px;height:300px; "></td>
          <td></td></tr>
-    <tr> <td>가격 :  원</td></tr>
-    <tr> <td>브랜드 : </td></tr>
+    <tr> <td>가격 : <%= product.price %> 원</td></tr>
+    <tr> <td>브랜드 : <%= product.brand %> </td></tr>
     <tr> <td>수량 : <input type="number" name="qty"> </td></tr>
-        <input type="hidden" name="loginid" value="">
-        <input type="hidden" name="mer_id" value="">
-        <input type="hidden" name="price" value="">
-            <tr><td><button class="btn btn-outline-primary btn-sm" formaction = "#" type="submit">결재</button>
-                    <button class="btn btn-outline-primary btn-sm" formaction = "#" type="submit">장바구니</button>
-            </td></tr>
+        <input type="hidden" name="loginid" value="<%= loginId %>">
+        <input type="hidden" name="mer_id" value="<%= product.mer_id %>">
+        <input type="hidden" name="price" value="<%= product.price %>">
+            <tr>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm" formaction = "/purchase/create_process" type="submit">결재</button>
+                    <button class="btn btn-outline-primary btn-sm" formaction = '/purchase/cart_process' onclick="return checkCart(<%= check %>);" type="submit">장바구니</button>
+                </td>
+            </tr>
 
-    </form>   
+    </form>
 </table>
+
+
+<script>
+    function checkCart(check){
+        if( check ){
+            alert('장바구니에 이미 있는 제품임');
+            location.href="/purchase/cart";
+            return false;
+        }
+        return true;
+
+    }
+</script>

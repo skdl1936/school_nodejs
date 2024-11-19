@@ -6,11 +6,26 @@
     <tr> <td>공급업체 : <%= product.supplier %> </td></tr>
     <% if( login){%>
         <tr><td>
-            <a href="#" ><button class="btn btn-outline-primary btn-sm" type="submit" >구매</button></a>
-            <form action = "#" method="post" style = "display : inline-block">
-                <input type="hidden" value="" name="mer_id">
-                <button class="btn btn-outline-primary btn-sm" type="submit">장바구니</button>
+            <a href="/purchase/detail/<%= product.mer_id %>" ><button class="btn btn-outline-primary btn-sm" type="submit" >구매</button></a>
+            <form action = "/purchase/cart_process" method="post" style = "display : inline-block">
+                <input type="hidden" value="<%= product.mer_id %>" name="mer_id">
+                <button class="btn btn-outline-primary btn-sm" onclick="return checkCart(<%= check %>);" type="submit">장바구니</button>
             </form>
         </td></tr>
     <%} %>
 </table>
+
+
+<script>
+    function checkCart(check){
+        if( check ){
+            alert('장바구니에 이미 있는 제품임');
+            location.href="/purchase/cart";
+            return false;
+        }else{
+            document.querySelector('form[action="/purchase/cart_process"]').submit();
+            return true;
+        }
+
+    }
+</script>

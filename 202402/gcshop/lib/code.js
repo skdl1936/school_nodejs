@@ -71,10 +71,13 @@ module.exports = {
     },
 
     update : (req,res)=>{ // codeCU.ejs
-        var {name, login, cls} = authIsOwner(req,res);
-        var sql1 = 'select * from boardtype; ';
+        const {name, login, cls} = authIsOwner(req,res);
+        const start = req.params.start;
+        const main_id = req.params.main;
+        const sub_id = req.params.sub;
+        const sql1 = 'select * from boardtype; ';
         const sql2 = ` select * from code; `
-        var sql3 =  `select * from code where main_id = ` + req.params.main + ';'
+        const sql3 =  ` select * from code where main_id = ${main_id} and sub_id = ${sub_id} and start = ${start};`;
         db.query(sql1 + sql2 + sql3, (err,results)=>{
                 var context = {
                     who: name,
