@@ -154,28 +154,30 @@ module.exports = {
                 from board b inner join person p on b.loginid = p.loginid
                 where b.type_id = ? and b.p_id = ? ORDER BY date desc, board_id desc LIMIT ? OFFSET ?`,
                 [sanTypeId, 0, numPerPage, offs], (err2,boards)=> {
-                if(err2){
-                    throw err2;
-                }
-                    const context = {
-                    who: name,
-                    login: login,
-                    cls: cls,
-                    body: "board.ejs",
-                    boardtypes: results[0],
-                    boards: boards,
-                    pNum: pNum,
-                    totalPages: totalPages,
-                    codes: results[1],
-                    boardTypeInfo: results[2],
-                }
-
-                req.app.render('mainFrame', context, (err, html) => {
-                    if(err){
-                        throw err;
+                    if(err2){
+                        throw err2;
                     }
-                    res.end(html);
-                })
+                    console.log(cls)
+                    console.log(boards)
+                    const context = {
+                        who: name,
+                        login: login,
+                        cls: cls,
+                        body: "board.ejs",
+                        boardtypes: results[0],
+                        boards: boards,
+                        pNum: pNum,
+                        totalPages: totalPages,
+                        codes: results[1],
+                        boardTypeInfo: results[2],
+                    }
+
+                    req.app.render('mainFrame', context, (err, html) => {
+                        if(err){
+                            throw err;
+                        }
+                        res.end(html);
+                    })
             })
         })
     },
