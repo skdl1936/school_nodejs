@@ -1,3 +1,6 @@
+<% if (purchases.length === 0){ %>
+    <p>자료가 없으니 추가해 주십시오. </p>
+<%}else{%>
 <table class="table table-bordered border-primary table-hover" style="text-align: center;">
     <thead class="table-primary ">
         <th>고객ID</th>
@@ -34,3 +37,4 @@
     <% }%>
 
 </table>
+<%}%>

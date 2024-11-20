@@ -32,11 +32,10 @@ module.exports = {
         const {name, login, cls} = authIsOwner(req,res);
         const sql1 = `select * from boardtype; `;
         const sql2 = ` select * from code;`
-        db.query(sql1, (err,results)=>{
+        db.query(sql1+ sql2, (err,results)=>{
             if(err){
                 throw err;
             }
-
             const context = {
                 who:name,
                 login : login,
@@ -47,6 +46,8 @@ module.exports = {
                 codes: results[1]
             }
             req.app.render('mainFrame', context, (err, html) => {
+                if(err)
+                    throw err;
                 res.end(html);
             })
         })

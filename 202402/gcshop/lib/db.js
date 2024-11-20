@@ -3,8 +3,8 @@ var mysql = require('mysql');
 var db =
     mysql.createConnection({
         host: 'localhost',
-        user: 'root',
-        password: 'root',
+        user: 'nodejs',
+        password: 'nodejs',
         database: 'webdb2024',
         multipleStatements: true
     });

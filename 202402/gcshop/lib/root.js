@@ -3,6 +3,7 @@ const {authIsOwner} = require('./util');
 const { URL } = require('url');
 const sanitizeHtml = require("sanitize-html");
 const {purchase} = require("./purchase");
+const {auth} = require("mysql/lib/protocol/Auth");
 
 module.exports = {
     home: (req, res) => {
@@ -412,5 +413,35 @@ module.exports = {
             res.redirect('/purchaseView')
             res.end();
         })
+    },
+    customer:(req,res)=>{
+        const {name,login, cls} = authIsOwner(req,res);
+        const sql1 = 'select * from boardtype;';
+        const sql2 = ` select * from code; `;
+        const sql3 = ` select address,ROUND(( count(*) / ( select count(*) from person )) * 100, 2) as rate
+from person group by address; `;
+
+        db.query(sql1 + sql2 + sql3 , (err,results)=>{
+            if (err){
+                throw err;
+            }
+            const context = {
+                who:name,
+                login: login,
+                cls:cls,
+                body: 'ceoAnal.ejs',
+                boardtypes: results[0],
+                codes:results[1],
+                percentage: results[2]
+            }
+
+            req.app.render('mainFrame', context, (err, html) => {
+                if (err){
+                    throw err;
+                }
+                res.end(html);
+            })
+        })
+
     }
 }

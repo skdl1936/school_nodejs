@@ -55,5 +55,8 @@ router.get('/purchaseDelete/:purchaseId',(req,res)=>{
     root.purchaseDeleteProcess(req,res);
 })
 
+router.get('/anal/customer',(req,res)=>{
+    root.customer(req,res);
+})
 
 module.exports = router;
